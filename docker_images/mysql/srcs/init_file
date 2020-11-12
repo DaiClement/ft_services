@@ -1,0 +1,5 @@
+CREATE USER 'cdai'@'%' IDENTIFIED BY 'pass';
+GRANT ALL ON *.* TO 'cdai'@'%' WITH GRANT OPTION;
+CREATE DATABASE wordpress;
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wp-admin'@'%' IDENTIFIED BY 'pass';
+FLUSH PRIVILEGES;
