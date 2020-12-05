@@ -6,6 +6,7 @@ PMA_ALPINE	= pma_alpine
 WP_ALPINE	= wp_alpine
 GRAFANA_ALPINE	= grafana_alpine
 INFLUXDB_ALPINE	= influxdb_alpine
+FTPS_ALPINE	= ftps_alpine
 
 
 all:	$(NAME)		
@@ -13,30 +14,33 @@ all:	$(NAME)
 $(NAME): build run
 	
 clean:
-	docker kill $(NGINX_ALPINE) $(MYSQL_ALPINE) $(PMA_ALPINE) $(WP_ALPINE) $(GRAFANA_ALPINE) $(INFLUXDB_ALPINE) || echo -n
-	docker rm $(NGINX_ALPINE) $(MYSQL_ALPINE) $(PMA_ALPINE) $(WP_ALPINE) $(GRAFANA_ALPINE) $(INFLUXDB_ALPINE) || echo -n
+	docker kill $(NGINX_ALPINE) $(MYSQL_ALPINE) $(PMA_ALPINE) $(WP_ALPINE) $(GRAFANA_ALPINE) $(INFLUXDB_ALPINE) $(FTPS_ALPINE) || echo -n
+	docker rm $(NGINX_ALPINE) $(MYSQL_ALPINE) $(PMA_ALPINE) $(WP_ALPINE) $(GRAFANA_ALPINE) $(INFLUXDB_ALPINE) $(FTPS_ALPINE) || echo -n
 		
 fclean:	clean
 	echo "user42" | sudo -S service mysql stop;
 	echo "user42" | sudo -S service nginx stop;
+	echo "user42" | sudo -S service sshd stop;
 	
 re:				fclean all
 
 build:
-#	docker build -t $(NGINX_ALPINE) nginx/
-#	docker build -t $(MYSQL_ALPINE) mysql/
-#	docker build -t $(PMA_ALPINE) pma/
-#	docker build -t $(WP_ALPINE) wp/
-	docker build -t $(GRAFANA_ALPINE) grafana/
-	docker build -t $(INFLUXDB_ALPINE) influxdb/
+	docker build -t $(MYSQL_ALPINE) mysql/
+	docker build -t $(NGINX_ALPINE) nginx/
+	docker build -t $(PMA_ALPINE) pma/
+	docker build -t $(WP_ALPINE) wp/
+#	docker build -t $(GRAFANA_ALPINE) grafana/
+#	docker build -t $(INFLUXDB_ALPINE) influxdb/
+#	docker build -t $(FTPS_ALPINE) ftps/
 
 run:
-#	docker run -d --name $(MYSQL_ALPINE) $(MYSQL_ALPINE)
-#	docker run -d -p 127.0.0.1:8080:80 --name $(NGINX_ALPINE) $(NGINX_ALPINE)
-#	docker run -d -p 127.0.0.1:5000:5000 --name $(PMA_ALPINE) --link $(MYSQL_ALPINE):db $(PMA_ALPINE)
-#	docker run -d -p 127.0.0.1:5050:5050 --name $(WP_ALPINE) --link $(MYSQL_ALPINE):db $(WP_ALPINE)
-	docker run -dti --name $(INFLUXDB_ALPINE) $(INFLUXDB_ALPINE)
-	docker run -dti -p 127.0.0.1:3000:3000 --name $(GRAFANA_ALPINE) --link $(INFLUXDB_ALPINE) $(GRAFANA_ALPINE)
+	docker run -dti --name $(MYSQL_ALPINE) $(MYSQL_ALPINE)
+	docker run -dti -p 127.0.0.1:5000:5000 --name $(PMA_ALPINE) --link $(MYSQL_ALPINE):db $(PMA_ALPINE)
+	docker run -dti -p 127.0.0.1:5050:5050 --name $(WP_ALPINE) --link $(MYSQL_ALPINE):db $(WP_ALPINE)
+	docker run -dti -p 127.0.0.1:80:80 -p 127.0.0.1:443:443 -p 127.0.0.1:22:22 --link $(PMA_ALPINE) --name $(NGINX_ALPINE) $(NGINX_ALPINE)
+#	docker run -dti --name $(INFLUXDB_ALPINE) $(INFLUXDB_ALPINE)
+#	docker run -dti -p 127.0.0.1:3000:3000 --name $(GRAFANA_ALPINE) --link $(INFLUXDB_ALPINE) $(GRAFANA_ALPINE)
+#	docker run -dti -p 127.0.0.1:21:21 --name $(FTPS_ALPINE) $(FTPS_ALPINE)
 
 prune:
 	docker system prune -af
