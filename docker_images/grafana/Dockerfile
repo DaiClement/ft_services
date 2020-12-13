@@ -12,6 +12,14 @@ RUN	apk add --no-cache bash
 RUN	apk add --no-cache libc6-compat
 RUN	apk add --no-cache ca-certificates
 
+
+RUN 	apk add --no-cache iputils ca-certificates net-snmp-tools procps lm_sensors tzdata; \
+	update-ca-certificates;
+
+RUN	mkdir ~/.gnupg;
+RUN    	apk add --no-cache --virtual .build-deps wget gnupg tar 
+
+
 run	wget https://dl.grafana.com/oss/release/grafana-7.3.2.linux-amd64.tar.gz; \
 	tar -zxvf grafana-7.3.2.linux-amd64.tar.gz; \
 	cp -r grafana-7.3.2/* .; \
@@ -21,13 +29,13 @@ run	wget https://dl.grafana.com/oss/release/grafana-7.3.2.linux-amd64.tar.gz; \
 	cp /tmp/test.yaml /usr/share/grafana/conf/provisioning/dashboards/; \
 	cp /tmp/*.json /usr/share/grafana/conf/provisioning/dashboards/;
 
-#RUN	mkdir -p /usr/src /etc/telegraf; \
-#	wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz; \
-#	tar -C /usr/src -xzf telegraf-1.16.2_linux_amd64.tar.gz; \
-#    	mv /usr/src/telegraf*/etc/telegraf/telegraf.conf /etc/telegraf/; \
-#    	mkdir /etc/telegraf/telegraf.d; \
-#    	cp -a /usr/src/telegraf*/usr/bin/telegraf /usr/bin/; \
-#	cp /tmp/telegraf.conf /etc/telegraf/;
+RUN	mkdir -p /usr/src /etc/telegraf; \
+	wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz; \
+	tar -C /usr/src -xzf telegraf-1.16.2_linux_amd64.tar.gz; \
+   	mv /usr/src/telegraf*/etc/telegraf/telegraf.conf /etc/telegraf/; \
+   	mkdir /etc/telegraf/telegraf.d; \
+   	cp -a /usr/src/telegraf*/usr/bin/telegraf /usr/bin/; \
+	cp /tmp/telegraf.conf /etc/telegraf/;
 
 EXPOSE	3000
 
@@ -36,5 +44,4 @@ CMD \
 	--homepath=/usr/share/grafana \
 	--config=/tmp/grafana.ini \
 	--packaging=docker \
-	"$@"
-#	& telegraf;
+	"$@" & telegraf;

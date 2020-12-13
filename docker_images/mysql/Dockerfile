@@ -24,4 +24,4 @@ EXPOSE 3306
 
 CMD	\
 	rc-service mariadb restart; \
-	sh;
+	tail -f /dev/null;

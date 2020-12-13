@@ -4,7 +4,6 @@ ADD ./srcs /tmp
 
 RUN 	apk update
 RUN	apk add --no-cache vim
-RUN	apk add --no-cache nginx
 RUN	apk add libc6-compat
 RUN 	apk add --no-cache iputils ca-certificates net-snmp-tools procps lm_sensors tzdata; \
 	update-ca-certificates;
@@ -12,11 +11,7 @@ RUN 	apk add --no-cache iputils ca-certificates net-snmp-tools procps lm_sensors
 RUN	mkdir ~/.gnupg;
 RUN    	apk add --no-cache --virtual .build-deps wget gnupg tar 
 
-RUN	adduser -D -g 'www' www; \
-	mkdir /www; \
-	mkdir -p /run/nginx; \
-	mv tmp/nginx.conf /etc/nginx/nginx.conf; \
-	mv tmp/index.html /www/index.html; \
+RUN	\
 	wget https://dl.influxdata.com/influxdb/releases/influxdb-1.8.3-static_linux_amd64.tar.gz
 
 RUN	addgroup influxdb && \
@@ -42,5 +37,5 @@ RUN	mkdir -p /usr/src /etc/telegraf; \
 
 EXPOSE	8086
 
-CMD	\	
+CMD	\
 	influxd & telegraf;
