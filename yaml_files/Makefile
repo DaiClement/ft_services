@@ -12,15 +12,7 @@ FTPS_ALPINE		= ftps_alpine
 all:	$(NAME)
 
 $(NAME): stop_service start
-	kubectl apply -f metallb_config.yaml;
-	minikube addons enable metrics-server;
-	minikube addons enable metallb;
-	kubectl apply -f metallb_layer2.yaml;
-	eval $(minikube -p minikube docker-env);
-	docker build -t nginx-alpine ../docker_images/nginx;
-	docker build -t mysql-alpine ../docker_images/mysql;
-	kubectl apply -f nginx.yaml;
-	kubectl apply -f mysql.yaml;
+	./setup.sh
 
 clean: stop delete clean_docker
 
@@ -35,7 +27,8 @@ clean_docker:
 	docker kill $$(docker ps -aq) || echo -n
 	docker rm $$(docker ps -aq) || echo -n
 
-re:	fclean all
+re:
+	./setup.sh re
 
 start:
 	minikube start --driver=docker --cpus=3 --memory=2200

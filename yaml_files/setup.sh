@@ -55,12 +55,31 @@ launch_ft_services()
 	docker build -t nginx-alpine ../docker_images/nginx/;
 	docker build -t mysql-alpine ../docker_images/mysql/;
 	docker build -t wp-alpine ../docker_images/wp/;
+	docker build -t pma-alpine ../docker_images/pma/;
+	docker build -t influxdb-alpine ../docker_images/influxdb/;
+	docker build -t grafana-alpine ../docker_images/grafana/;
 	kubectl apply -f nginx.yaml;
 	kubectl apply -f mysql.yaml;
+	kubectl apply -f pma.yaml;
 	kubectl apply -f wp.yaml;
+	kubectl apply -f influxdb.yaml;
+	kubectl apply -f grafana.yaml;
 }
 
 #install
 #clear_all
 #build
-launch_ft_services
+#launch_ft_services
+if [ "$1" = "re" ]
+then
+	minikube stop;
+	minikube delete;
+	launch_ft_services;
+	minikube dashboard &
+elif [ "$1" = "" ]
+then
+	launch_ft_services;
+	minikube dashboard &
+else
+	echo \"$1\" is not an argument
+fi

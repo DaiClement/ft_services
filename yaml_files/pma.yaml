@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pma-deployment
+spec:
+  selector:
+    matchLabels:
+      app: pma
+  template:
+    metadata:
+      labels:
+        app: pma
+    spec:
+      containers:
+      - name: pma   
+        image: pma-alpine
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pma-service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared
+spec:
+  selector:
+    app: pma
+  ports:
+  - name: http
+    protocol: TCP
+    port: 5000
+    targetPort: 5000
+  type: LoadBalancer

@@ -7,15 +7,6 @@ datasources:
     database: influxdb_metrics_data
     user: admin
     password: admin
-    url: influxdb_alpine:8086
-    jsonData:
-      httpMode: GET
-  - name: Grafana_metrics_data
-    type: influxdb
-    acces: proxy
-    database: grafana_metrics_data
-    user: admin
-    password: admin
-    url: influxdb_alpine:8086
+    url: influxdb-alpine:8086
     jsonData:
       httpMode: GET

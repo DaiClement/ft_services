@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb-deployment
+spec:
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb-alpine
+        ports:
+        - containerPort: 8086
+        imagePullPolicy: Never
+        volumeMounts:
+        - name: telegraf-endpoint
+          mountPath: "/var/run/docker.sock"
+      volumes:
+      - name: telegraf-endpoint
+        hostPath:
+          path: /var/run/docker.sock
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb-service
+spec:
+  selector:
+    app: influxdb
+  ports:
+  - name: influxdb
+    protocol: TCP
+    port: 8086
+    targetPort: 8086
+  type: ClusterIP
