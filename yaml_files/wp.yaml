@@ -17,6 +17,13 @@ spec:
         ports:
         - containerPort: 5050
         imagePullPolicy: Never
+        livenessProbe:
+          exec:
+            command:
+            - /bin/ash
+            - /tmp/livenessprobe.sh
+          initialDelaySeconds: 5
+          periodSeconds: 3
 ---
 apiVersion: v1
 kind: Service

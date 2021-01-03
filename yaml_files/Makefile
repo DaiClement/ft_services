@@ -21,7 +21,7 @@ fclean:	clean prune
 stop_service:
 	echo "user42" | sudo -S service mysql stop;
 	echo "user42" | sudo -S service nginx stop;
-	echo "user42" | sudo -S service sshd stop;
+#	echo "user42" | sudo -S service sshd stop;
 
 clean_docker:
 	docker kill $$(docker ps -aq) || echo -n
