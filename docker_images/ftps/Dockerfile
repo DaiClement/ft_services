@@ -3,10 +3,8 @@ FROM alpine:latest
 ADD ./srcs /tmp
 
 RUN 	apk update
-#RUN	apk add --no-cache nginx
 RUN	apk add --no-cache vsftpd
 RUN	apk add --no-cache openrc
-RUN	apk add --no-cache vim
 RUN	apk add --no-cache openssl
 
 RUN	\
@@ -28,37 +26,11 @@ RUN	\
 	rc-status --manual; \
 	rc-status --crashed; \
 	cp /tmp/vsftpd.conf /etc/vsftpd/; \
-	cp /tmp/chroot.list /etc/vsftpd/; \
 	echo root:pass | chpasswd; \
-	adduser -D user42 -g root; \
-	echo user42:user42 | chpasswd; \
 	/etc/init.d/vsftpd restart;
-#	mkdir /www; \
-#	adduser -D -g 'www' www; \
-#	mv tmp/index.html /www/index.html; \
-#	mkdir -p /run/nginx; \
-#	mv tmp/nginx.conf /etc/nginx/nginx.conf; \
-#	/etc/init.d/nginx restart; \
-#	openssl \
-#	req \
-#	-x509 \
-#	-nodes \
-#	-days 365 \
-#	-subj "/C=CA/ST=QC/O=Company, Inc./CN=mydomain.com" \
-#	-addext "subjectAltName=DNS:mydomain.com" \
-#	-newkey rsa:2048 \
-#	-keyout /etc/ssl/private/nginx-selfsigned.key \
-#	-out /etc/ssl/certs/nginx-selfsigned.crt;
 
+EXPOSE 20 21
 
-
-
-EXPOSE 21
-
-#CMD \
-#	nginx -g "daemon off;"
 CMD	\
 	rc-service vsftpd restart; \
 	tail -f /dev/null;
-#/etc/init.d/vsftpd restart
-#
