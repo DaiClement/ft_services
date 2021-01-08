@@ -12,7 +12,7 @@ spec:
         app: pma
     spec:
       containers:
-      - name: pma   
+      - name: pma
         image: pma-alpine
         ports:
         - containerPort: 5000

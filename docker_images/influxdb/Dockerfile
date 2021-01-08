@@ -19,11 +19,12 @@ RUN	addgroup influxdb && \
 
 RUN	tar -C . -xzf influxdb-1.8.3-static_linux_amd64.tar.gz;
 #	mkdir /etc/influxdb; \
-#	cp tmp/influxdb.conf /etc/influxdb/; \
 RUN     chmod +x influxdb-*/*; \
         cp -a influxdb-*/* /usr/bin/; \
-	mkdir -p /var/lib/influxdb; \
-	chown -R influxdb:influxdb /var/lib/influxdb;
+	mkdir -p /var/lib/influxdb/data; \
+	chown -R influxdb:influxdb /var/lib/influxdb/data; \
+	mkdir -p /etc/influxdb/; \
+	cp /influxdb-*/influxdb.conf /etc/influxdb/;
 
 RUN	mkdir -p /usr/src /etc/telegraf; \
 	wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz; \

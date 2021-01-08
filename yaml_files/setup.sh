@@ -53,18 +53,18 @@ launch_ft_services()
 	kubectl apply -f metallb_layer2.yaml;
 	eval $(minikube -p minikube docker-env);
 	docker build -t nginx-alpine ../docker_images/nginx/;
-	docker build -t mysql-alpine ../docker_images/mysql/;
-	docker build -t wp-alpine ../docker_images/wp/;
-	docker build -t pma-alpine ../docker_images/pma/;
-#	docker build -t influxdb-alpine ../docker_images/influxdb/;
-#	docker build -t grafana-alpine ../docker_images/grafana/;
+#	docker build -t mysql-alpine ../docker_images/mysql/;
+#	docker build -t wp-alpine ../docker_images/wp/;
+#	docker build -t pma-alpine ../docker_images/pma/;
+	docker build -t influxdb-alpine ../docker_images/influxdb/;
+	docker build -t grafana-alpine ../docker_images/grafana/;
 #	docker build -t ftps-alpine ../docker_images/ftps/;
 	kubectl apply -f nginx.yaml;
-	kubectl apply -f mysql.yaml;
-	kubectl apply -f pma.yaml;
-	kubectl apply -f wp.yaml;
-#	kubectl apply -f influxdb.yaml;
-#	kubectl apply -f grafana.yaml;
+#	kubectl apply -f mysql.yaml;
+#	kubectl apply -f pma.yaml;
+#	kubectl apply -f wp.yaml;
+	kubectl apply -f influxdb.yaml;
+	kubectl apply -f grafana.yaml;
 #	kubectl apply -f ftps.yaml;
 }
 
