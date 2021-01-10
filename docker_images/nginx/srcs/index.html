@@ -9,16 +9,47 @@
     <h1>Server nginx_alpine is online</h1>
 	<ul>
 		<li>
-			<a href="http://127.0.0.1:5000" target="_blank">pma_alpine server</a>
+			<a href="http://192.168.49.10:5000" target="_blank">pma_alpine server</a>
 		</li>
+		<li>
+			<a href="http://192.168.49.10:5050" target="_blank">wp alpine server</a>
+		</li>
+		<li>
+			<a href="http://192.168.49.10:3000" target="_blank">grafana alpine server</a>
+		</li>
+		<li>
+			For ftps, click on the button to copie the address, then open it in filezilla with address
+			<br>
+			user: root
+			<br>
+			password: pass
+			<br>
+			port: 21
+			<br>
+			<!-- source https://www.w3schools.com/howto/howto_js_copy_clipboard.asp -->
+			<!-- The text field -->
+			<input type="text" value="192.168.49.10" id="myInput" style="display:none">
 
-		<li>
-			<a href="http://127.0.0.1:5050" target="_blank">wp alpine server</a>
-		</li>
-		<li>
-			<a href="http://127.0.0.1:3000" target="_blank">grafana alpine server</a>
+			<!-- The button used to copy the text -->
+			<button onclick="myFunction()">Copie to clipboard: 192.168.49.10</button>
 		</li>
 	</ul>
+	<script>
+		function myFunction() {
+			/* Get the text field */
+			var copyText = document.getElementById("myInput");
+			
+			/* Select the text field */
+			copyText.select();
+			//copyText.setSelectionRange(0, 99999); /* For mobile devices */
+			
+			/* Copy the text inside the text field */
+			document.execCommand("copy");
+			
+			/* Alert the copied text */
+			//alert("Copied the text: " + copyText.value);
+		}
+	</script>
 </body>
 </html>
 
