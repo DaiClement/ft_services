@@ -1,15 +1,15 @@
-FROM alpine:latest
+FROM	alpine:latest
 
-ADD ./srcs /tmp
+ADD		./srcs /tmp
 
 RUN 	apk update
-RUN	apk add --no-cache mysql mysql-client openrc
+RUN		apk add --no-cache mysql mysql-client openrc
 
-RUN	mkdir -p /run/mysqld; \
-	mkdir -p /run/openrc; \
-	touch /run/openrc/softlevel;
+RUN		mkdir -p /run/mysqld; \
+		mkdir -p /run/openrc; \
+		touch /run/openrc/softlevel;
 
-EXPOSE 3306
+EXPOSE	3306
 
-CMD	\
-	sh /tmp/setup.sh;
+CMD		\
+		sh /tmp/setup.sh;

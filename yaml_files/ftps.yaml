@@ -18,7 +18,7 @@ spec:
         - containerPort: 21
           hostPort: 21
         - containerPort: 20
-          hostport: 20
+          hostPort: 20
         - containerPort: 30020
           hostPort: 30020
         - containerPort: 30021

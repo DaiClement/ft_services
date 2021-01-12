@@ -34,10 +34,10 @@ start:
 	minikube start --driver=docker --cpus=3 --memory=2200
 
 stop:
-	minikube stop;
+	minikube stop || echo -n;
 
 delete:
-	minikube delete --all;
+	minikube delete --all || echo -n;
 
 prune:
 	docker system prune -af

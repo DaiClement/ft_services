@@ -1,5 +1,5 @@
 #!/bin/ash
-influx -database 'influxdb_metrics_data' -execute 'select * from cpu' -format 'json' -pretty;
+influx -database 'docker_metrics' -execute 'select * from cpu' -format 'json' -pretty;
 return_influx="$?"
 #service sshd status
 #return_sshd=$?
