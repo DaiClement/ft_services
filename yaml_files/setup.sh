@@ -3,7 +3,7 @@
 install()
 {
 	#installation from https://kubernetes.io/docs/tasks/tools/install-kubectl/
-	echo install kubectl:;
+	echo install kubectl;
 	sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl;
 	curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -;
 	echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list;
@@ -34,26 +34,27 @@ install()
 
 launch_ft_services()
 {
-	minikube start --driver=docker --cpus=3 --memory=3000;
-	kubectl apply -f metallb_config.yaml;
+	minikube start --driver=docker --cpus=2 --memory=3000;
+#	kubectl apply -f metallb_config.yaml;
+	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.1/manifests/metallb.yaml
 	minikube addons enable metrics-server;
-	minikube addons enable metallb;
+#	minikube addons enable metallb;
 	kubectl apply -f metallb_layer2.yaml;
 	eval $(minikube -p minikube docker-env);
 	docker build -t nginx-alpine ../docker_images/nginx/;
 	docker build -t mysql-alpine ../docker_images/mysql/;
 	docker build -t wp-alpine ../docker_images/wp/;
 	docker build -t pma-alpine ../docker_images/pma/;
-	docker build -t influxdb-alpine ../docker_images/influxdb/;
-	docker build -t grafana-alpine ../docker_images/grafana/;
-	docker build -t ftps-alpine ../docker_images/ftps/;
+#	docker build -t influxdb-alpine ../docker_images/influxdb/;
+#	docker build -t grafana-alpine ../docker_images/grafana/;
+#	docker build -t ftps-alpine ../docker_images/ftps/;
 	kubectl apply -f nginx.yaml;
 	kubectl apply -f mysql.yaml;
 	kubectl apply -f pma.yaml;
 	kubectl apply -f wp.yaml;
-	kubectl apply -f influxdb.yaml;
-	kubectl apply -f grafana.yaml;
-	kubectl apply -f ftps.yaml;
+#	kubectl apply -f influxdb.yaml;
+#	kubectl apply -f grafana.yaml;
+#	kubectl apply -f ftps.yaml;
 }
 
 if [ "$1" = "re" ]
