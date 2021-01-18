@@ -58,7 +58,8 @@ launch_ft_services()
 	kubectl apply -f ./yaml_files/ftps.yaml;
 }
 
-
+echo $(grep MemTotal /proc/meminfo | awk '{print $2}') bytes of ram '|' Need 2Go of ram;
+echo $(grep 'cpu cores' /proc/cpuinfo | uniq | awk '{print $4}') cpus '|' Need 2 free cpus;
 if [[ $(groups | grep docker) = '' ]]
 then
 	sudo usermod -aG docker $USER
