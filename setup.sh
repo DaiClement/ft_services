@@ -34,28 +34,47 @@ install()
 
 launch_ft_services()
 {
-	minikube start --driver=docker --cpus=2 --memory=3000;
-	minikube dashboard &
+	echo minikube start
+	minikube start --driver=docker --cpus=2 --memory=2000 2>&1 > /dev/null;
+	echo minikube started;
+	minikube dashboard 2>&1 > /dev/null &
+	echo launch dashboard;
 #	kubectl apply -f metallb_config.yaml;
-	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.1/manifests/metallb.yaml
-	minikube addons enable metrics-server;
+	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.1/manifests/metallb.yaml > /dev/null
+	kubectl apply -f ./yaml_files/metallb_layer2.yaml > /dev/null ;
+	echo setup metallb;
+	minikube addons enable metrics-server > /dev/null ;
 #	minikube addons enable metallb;
-	kubectl apply -f ./yaml_files/metallb_layer2.yaml;
-	eval $(minikube -p minikube docker-env);
-	docker build -t nginx-alpine ./docker_images/nginx/;
-	kubectl apply -f ./yaml_files/nginx.yaml;
-	docker build -t mysql-alpine ./docker_images/mysql/;
-	kubectl apply -f ./yaml_files/mysql.yaml;
-	docker build -t wp-alpine ./docker_images/wp/;
-	kubectl apply -f ./yaml_files/wp.yaml;
-	docker build -t pma-alpine ./docker_images/pma/;
-	kubectl apply -f ./yaml_files/pma.yaml;
-	docker build -t influxdb-alpine ./docker_images/influxdb/;
-	kubectl apply -f ./yaml_files/influxdb.yaml;
-	docker build -t grafana-alpine ./docker_images/grafana/;
-	kubectl apply -f ./yaml_files/grafana.yaml;
-	docker build -t ftps-alpine ./docker_images/ftps/;
-	kubectl apply -f ./yaml_files/ftps.yaml;
+	eval $(minikube -p minikube docker-env) > /dev/null ;
+
+	docker build -t nginx-alpine ./docker_images/nginx/ > /dev/null ; 
+	kubectl apply -f ./yaml_files/nginx.yaml > /dev/null ;
+	echo nginx started;
+
+	docker build -t mysql-alpine ./docker_images/mysql/ > /dev/null ;
+	kubectl apply -f ./yaml_files/mysql.yaml > /dev/null ;
+	echo mysql started;
+
+	docker build -t wp-alpine ./docker_images/wp/ > /dev/null ;
+	kubectl apply -f ./yaml_files/wp.yaml > /dev/null ;
+	echo wordpress started;
+
+	docker build -t pma-alpine ./docker_images/pma/ > /dev/null ;
+	kubectl apply -f ./yaml_files/pma.yaml > /dev/null ;
+	echo phpmyadmin started;
+
+	docker build -t influxdb-alpine ./docker_images/influxdb/ > /dev/null ;
+	kubectl apply -f ./yaml_files/influxdb.yaml > /dev/null ;
+	echo influxdb started;
+
+	docker build -t grafana-alpine ./docker_images/grafana/ > /dev/null ;
+	kubectl apply -f ./yaml_files/grafana.yaml > /dev/null ;
+	echo grafana started;
+
+	docker build -t ftps-alpine ./docker_images/ftps/ > /dev/null ;
+	kubectl apply -f ./yaml_files/ftps.yaml > /dev/null ;
+	echo ftps started;
+
 }
 
 echo $(grep MemTotal /proc/meminfo | awk '{print $2}') bytes of ram '|' Need 2Go of ram;
@@ -68,8 +87,8 @@ then
 fi
 if [ "$1" = "re" ]
 then
-	minikube stop;
-	minikube delete;
+	minikube stop > /dev/null ;
+	minikube delete > /dev/null ;
 	launch_ft_services;
 elif [ "$1" = "" ]
 then

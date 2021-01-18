@@ -11,7 +11,7 @@ FTPS_ALPINE		= ftps_alpine
 
 all:	$(NAME)
 
-$(NAME): start
+$(NAME):
 	./setup.sh
 
 clean: stop delete clean_docker
@@ -31,7 +31,7 @@ re:
 	./setup.sh re
 
 start:
-	minikube start --driver=docker --cpus=2 --memory=2200
+	minikube start --driver=docker --cpus=2 --memory=2000
 
 stop:
 	minikube stop || echo -n;
