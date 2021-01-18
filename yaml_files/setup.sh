@@ -35,6 +35,7 @@ install()
 launch_ft_services()
 {
 	minikube start --driver=docker --cpus=2 --memory=3000;
+	minikube dashboard &
 #	kubectl apply -f metallb_config.yaml;
 	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.1/manifests/metallb.yaml
 	minikube addons enable metrics-server;
@@ -42,18 +43,18 @@ launch_ft_services()
 	kubectl apply -f metallb_layer2.yaml;
 	eval $(minikube -p minikube docker-env);
 	docker build -t nginx-alpine ../docker_images/nginx/;
-	docker build -t mysql-alpine ../docker_images/mysql/;
-	docker build -t wp-alpine ../docker_images/wp/;
-	docker build -t pma-alpine ../docker_images/pma/;
-	docker build -t influxdb-alpine ../docker_images/influxdb/;
-	docker build -t grafana-alpine ../docker_images/grafana/;
-	docker build -t ftps-alpine ../docker_images/ftps/;
 	kubectl apply -f nginx.yaml;
+	docker build -t mysql-alpine ../docker_images/mysql/;
 	kubectl apply -f mysql.yaml;
-	kubectl apply -f pma.yaml;
+	docker build -t wp-alpine ../docker_images/wp/;
 	kubectl apply -f wp.yaml;
+	docker build -t pma-alpine ../docker_images/pma/;
+	kubectl apply -f pma.yaml;
+	docker build -t influxdb-alpine ../docker_images/influxdb/;
 	kubectl apply -f influxdb.yaml;
+	docker build -t grafana-alpine ../docker_images/grafana/;
 	kubectl apply -f grafana.yaml;
+	docker build -t ftps-alpine ../docker_images/ftps/;
 	kubectl apply -f ftps.yaml;
 }
 
@@ -69,11 +70,9 @@ then
 	minikube stop;
 	minikube delete;
 	launch_ft_services;
-	minikube dashboard &
 elif [ "$1" = "" ]
 then
 	launch_ft_services;
-	minikube dashboard &
 else
 	echo \"$1\" is not an argument
 fi
