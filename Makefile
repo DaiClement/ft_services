@@ -53,7 +53,7 @@ endif
 exec:
 #	docker exec -ti $(RUN_ARGS)_alpine sh
 	kubectl exec --stdin --tty \
-	$$(kubectl get pods | grep $(RUN_ARGS)-deployment | cut -c \
+	$$(kubectl get pods | grep $(RUN_ARGS) | cut -c \
 		-$$(expr $$(echo -n $(RUN_ARGS) | wc -c) + 28) \
 		) -- sh
 
@@ -65,6 +65,8 @@ config:
 	sed 's/marvin/cdai/' 42header/vim/stdheader.vim | sed 's/42.fr/student.42.fr/' > ~/.vim/plugin/stdheader.vim;
 	git config --global core.editor vim;
 	rm -rf 42header;
+	echo *.log > .gitignore
+	echo .*.swp >> .gitignore
 
 ifeq (search,$(firstword $(MAKECMDGOALS)))
     RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -76,5 +78,7 @@ search:
 
 firefox:
 	firefox 2>&1 > /dev/null &
+
+
 
 .PHONY:	all clean fclean re build run prune exec config search ps

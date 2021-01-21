@@ -1,21 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wp-deployment
+  name: nginx
 spec:
   selector:
     matchLabels:
-      app: wp
+      app: nginx
   template:
     metadata:
       labels:
-        app: wp
+        app: nginx
     spec:
       containers:
-      - name: wp
-        image: wp-alpine
+      - name: nginx
+        image: nginx-alpine
         ports:
-        - containerPort: 5050
+        - containerPort: 443
+        - containerPort: 80
         imagePullPolicy: Never
         livenessProbe:
           exec:
@@ -28,15 +29,19 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: wp-service
+  name: nginx-service
   annotations:
     metallb.universe.tf/allow-shared-ip: shared
 spec:
   selector:
-    app: wp
+    app: nginx
   ports:
     - name: http
       protocol: TCP
-      port: 5050
-      targetPort: 5050
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
   type: LoadBalancer

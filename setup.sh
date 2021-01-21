@@ -12,38 +12,38 @@ launch_ft_services()
 	echo launch dashboard;
 
 	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.1/manifests/metallb.yaml >> $log_files 2>&1
-	kubectl apply -f ./yaml_files/metallb_layer2.yaml >> $log_files 2>&1 ;
+	kubectl apply -f ./srcs/yaml_files/metallb_layer2.yaml >> $log_files 2>&1 ;
 	echo setup metallb;
 
 	minikube addons enable metrics-server >> $log_files 2>&1 ;
 	eval $(minikube -p minikube docker-env) >> $log_files 2>&1 ;
 
-	docker build -t nginx-alpine ./docker_images/nginx/ >> $log_files 2>&1 ; 
-	kubectl apply -f ./yaml_files/nginx.yaml >> $log_files 2>&1 ;
+	docker build -t nginx-alpine ./srcs/docker_images/nginx/ >> $log_files 2>&1 ; 
+	kubectl apply -f ./srcs/yaml_files/nginx.yaml >> $log_files 2>&1 ;
 	echo nginx started;
 
-	docker build -t mysql-alpine ./docker_images/mysql/ >> $log_files 2>&1 ;
-	kubectl apply -f ./yaml_files/mysql.yaml >> $log_files 2>&1 ;
+	docker build -t mysql-alpine ./srcs/docker_images/mysql/ >> $log_files 2>&1 ;
+	kubectl apply -f ./srcs/yaml_files/mysql.yaml >> $log_files 2>&1 ;
 	echo mysql started;
 
-	docker build -t wp-alpine ./docker_images/wp/ >> $log_files 2>&1 ;
-	kubectl apply -f ./yaml_files/wp.yaml >> $log_files 2>&1 ;
+	docker build -t wp-alpine ./srcs/docker_images/wp/ >> $log_files 2>&1 ;
+	kubectl apply -f ./srcs/yaml_files/wp.yaml >> $log_files 2>&1 ;
 	echo wordpress started;
 
-	docker build -t pma-alpine ./docker_images/pma/ >> $log_files 2>&1 ;
-	kubectl apply -f ./yaml_files/pma.yaml >> $log_files 2>&1 ;
+	docker build -t pma-alpine ./srcs/docker_images/pma/ >> $log_files 2>&1 ;
+	kubectl apply -f ./srcs/yaml_files/pma.yaml >> $log_files 2>&1 ;
 	echo phpmyadmin started;
 
-	docker build -t influxdb-alpine ./docker_images/influxdb/ >> $log_files 2>&1 ;
-	kubectl apply -f ./yaml_files/influxdb.yaml >> $log_files 2>&1 ;
+	docker build -t influxdb-alpine ./srcs/docker_images/influxdb/ >> $log_files 2>&1 ;
+	kubectl apply -f ./srcs/yaml_files/influxdb.yaml >> $log_files 2>&1 ;
 	echo influxdb started;
 
-	docker build -t grafana-alpine ./docker_images/grafana/ >> $log_files 2>&1 ;
-	kubectl apply -f ./yaml_files/grafana.yaml >> $log_files 2>&1 ;
+	docker build -t grafana-alpine ./srcs/docker_images/grafana/ >> $log_files 2>&1 ;
+	kubectl apply -f ./srcs/yaml_files/grafana.yaml >> $log_files 2>&1 ;
 	echo grafana started;
 
-	docker build -t ftps-alpine ./docker_images/ftps/ >> $log_files 2>&1 ;
-	kubectl apply -f ./yaml_files/ftps.yaml >> $log_files 2>&1 ;
+	docker build -t ftps-alpine ./srcs/docker_images/ftps/ >> $log_files 2>&1 ;
+	kubectl apply -f ./srcs/yaml_files/ftps.yaml >> $log_files 2>&1 ;
 	echo ftps started;
 }
 
