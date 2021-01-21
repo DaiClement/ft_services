@@ -5,62 +5,62 @@ log_files=ft_services.log
 launch_ft_services()
 {
 	echo download minikube can take a while
-	minikube start --driver=docker --cpus=2 --memory=2000 2>&1 > $log_files;
+	minikube start --driver=docker --cpus=2 --memory=2000 > $log_files 2>&1;
 	echo minikube started;
 
-	minikube dashboard 2>&1 >> $log_files &
+	minikube dashboard >> $log_files 2>&1 &
 	echo launch dashboard;
 
-	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.1/manifests/metallb.yaml >> $log_files
-	kubectl apply -f ./yaml_files/metallb_layer2.yaml >> $log_files ;
+	kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.1/manifests/metallb.yaml >> $log_files 2>&1
+	kubectl apply -f ./yaml_files/metallb_layer2.yaml >> $log_files 2>&1 ;
 	echo setup metallb;
 
-	minikube addons enable metrics-server >> $log_files ;
-	eval $(minikube -p minikube docker-env) >> $log_files ;
+	minikube addons enable metrics-server >> $log_files 2>&1 ;
+	eval $(minikube -p minikube docker-env) >> $log_files 2>&1 ;
 
-	docker build -t nginx-alpine ./docker_images/nginx/ >> $log_files ; 
-	kubectl apply -f ./yaml_files/nginx.yaml >> $log_files ;
+	docker build -t nginx-alpine ./docker_images/nginx/ >> $log_files 2>&1 ; 
+	kubectl apply -f ./yaml_files/nginx.yaml >> $log_files 2>&1 ;
 	echo nginx started;
 
-	docker build -t mysql-alpine ./docker_images/mysql/ >> $log_files ;
-	kubectl apply -f ./yaml_files/mysql.yaml >> $log_files ;
+	docker build -t mysql-alpine ./docker_images/mysql/ >> $log_files 2>&1 ;
+	kubectl apply -f ./yaml_files/mysql.yaml >> $log_files 2>&1 ;
 	echo mysql started;
 
-	docker build -t wp-alpine ./docker_images/wp/ >> $log_files ;
-	kubectl apply -f ./yaml_files/wp.yaml >> $log_files ;
+	docker build -t wp-alpine ./docker_images/wp/ >> $log_files 2>&1 ;
+	kubectl apply -f ./yaml_files/wp.yaml >> $log_files 2>&1 ;
 	echo wordpress started;
 
-	docker build -t pma-alpine ./docker_images/pma/ >> $log_files ;
-	kubectl apply -f ./yaml_files/pma.yaml >> $log_files ;
+	docker build -t pma-alpine ./docker_images/pma/ >> $log_files 2>&1 ;
+	kubectl apply -f ./yaml_files/pma.yaml >> $log_files 2>&1 ;
 	echo phpmyadmin started;
 
-	docker build -t influxdb-alpine ./docker_images/influxdb/ >> $log_files ;
-	kubectl apply -f ./yaml_files/influxdb.yaml >> $log_files ;
+	docker build -t influxdb-alpine ./docker_images/influxdb/ >> $log_files 2>&1 ;
+	kubectl apply -f ./yaml_files/influxdb.yaml >> $log_files 2>&1 ;
 	echo influxdb started;
 
-	docker build -t grafana-alpine ./docker_images/grafana/ >> $log_files ;
-	kubectl apply -f ./yaml_files/grafana.yaml >> $log_files ;
+	docker build -t grafana-alpine ./docker_images/grafana/ >> $log_files 2>&1 ;
+	kubectl apply -f ./yaml_files/grafana.yaml >> $log_files 2>&1 ;
 	echo grafana started;
 
-	docker build -t ftps-alpine ./docker_images/ftps/ >> $log_files ;
-	kubectl apply -f ./yaml_files/ftps.yaml >> $log_files ;
+	docker build -t ftps-alpine ./docker_images/ftps/ >> $log_files 2>&1 ;
+	kubectl apply -f ./yaml_files/ftps.yaml >> $log_files 2>&1 ;
 	echo ftps started;
 }
 
 get_log(){
 	echo for phpmyadmin
 	echo login: admin '|' password: pass
-	echo login: wp-admin '|' password: pass'\n'
+	echo login: wp-admin '|' password: pass$'\n'
 
 	echo for wordpress
 	echo login: wp-admin '|' password:pass
 	echo login: Author '|' password:pass
 	echo login: contributor '|' password:pass
 	echo login: Editor '|' password:pass
-	echo login: subscriber '|' password:pass'\n'
+	echo login: subscriber '|' password:pass$'\n'
 
 	echo for grafana
-	echo login: admin '|' password: 'admin\n'
+	echo login: admin '|' password: $'admin\n'
 
 	echo for ftps
 	echo login: root '|' password: 'pass'
@@ -94,8 +94,8 @@ fi
 
 if [ "$1" = "re" ]
 then
-	minikube stop >> $log_files ;
-	minikube delete >> $log_files ;
+	minikube stop >> $log_files 2>&1 ;
+	minikube delete >> $log_files 2>&1 ;
 	launch_ft_services;
 elif [ "$1" = "" ]
 then
@@ -104,4 +104,6 @@ else
 	echo \"$1\" is not an argument
 	exit 1
 fi
+
+echo $'\n\n'
 get_log
