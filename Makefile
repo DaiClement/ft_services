@@ -79,6 +79,14 @@ search:
 firefox:
 	firefox 2>&1 > /dev/null &
 
+fix42VM:
+	# source: https://itsfoss.com/could-not-get-lock-error/
+	sudo kill -9 $$(sudo lsof /var/lib/dpkg/lock-frontend 2> /dev/null | grep unattende | awk '{print $$2}')
+	sudo rm /var/lib/dpkg/lock-frontend
+	sudo dpkg --configure -a
+	sudo kill -9 $$(sudo lsof /var/lib/dpkg/lock-frontend 2> /dev/null | grep unattende | awk '{print $$2}')
+	sudo rm /var/lib/dpkg/lock-frontend
+	sudo dpkg --configure -a
 
 
 .PHONY:	all clean fclean re build run prune exec config search ps
