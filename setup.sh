@@ -5,7 +5,7 @@ error_file=error.log
 
 launch_ft_services()
 {
-	echo download minikube can take a while
+	echo download minikube can take a while - please wait
 	minikube start --driver=docker --cpus=2 --memory=2000 > $log_file 2> $error_file;
 	echo minikube started;
 
@@ -75,8 +75,8 @@ check_minimum_requirement()
 
 	echo $memTotal bytes ram memory
 	echo $nbCpus cpus
-	echo $freeSpace bytes of free spaces
-	
+	echo $freeSpace bytes of free spaces$'\n'
+
 	if [ $memTotal -le 2900000 ]; then
 		echo Not enough RAM
 		exit 1

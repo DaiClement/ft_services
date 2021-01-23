@@ -62,4 +62,8 @@ fix42VM:
 new_ssh_key:
 	./setup.sh new_ssh_key
 
-.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key
+filezilla: fix42VM
+	sudo apt-get install -y filezilla
+	filezilla 2>&1 >/dev/null &
+
+.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla
