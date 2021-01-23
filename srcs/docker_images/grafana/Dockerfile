@@ -20,8 +20,8 @@ RUN	mkdir ~/.gnupg;
 RUN    	apk add --no-cache --virtual .build-deps wget gnupg tar 
 
 
-RUN	wget https://dl.grafana.com/oss/release/grafana-7.3.2.linux-amd64.tar.gz; \
-	tar -zxvf grafana-7.3.2.linux-amd64.tar.gz; \
+RUN	wget -q https://dl.grafana.com/oss/release/grafana-7.3.2.linux-amd64.tar.gz; \
+	tar -zxf grafana-7.3.2.linux-amd64.tar.gz; \
 	cp -r grafana-7.3.2/* .; \
     	addgroup -S grafana; \
     	adduser -S -G grafana grafana; \

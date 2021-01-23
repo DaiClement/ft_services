@@ -1,49 +1,22 @@
-NAME			= ft_services
-
-NGINX_ALPINE	= nginx_alpine
-MYSQL_ALPINE	= mysql_alpine
-PMA_ALPINE		= pma_alpine
-WP_ALPINE		= wp_alpine
-GRAFANA_ALPINE	= grafana_alpine
-INFLUXDB_ALPINE	= influxdb_alpine
-FTPS_ALPINE		= ftps_alpine
-
+NAME	= ft_services
 
 all:	$(NAME)
 
 $(NAME):
 	./setup.sh
 
-clean: stop delete clean_docker
+clean: stop 
 
-fclean:	clean prune
-
-stop_service:
-	echo "user42" | sudo -S service mysql stop;
-	echo "user42" | sudo -S service nginx stop;
-#	echo "user42" | sudo -S service sshd stop;
-
-clean_docker:
-	docker kill $$(docker ps -aq) || echo -n
-	docker rm $$(docker ps -aq) || echo -n
+fclean:	clean delete
 
 re:
 	./setup.sh re
-
-start:
-	minikube start --driver=docker --cpus=2 --memory=2000
 
 stop:
 	minikube stop || echo -n;
 
 delete:
 	minikube delete --all || echo -n;
-
-prune:
-	docker system prune -af
-
-ps:
-	docker ps
 
 ifeq (exec,$(firstword $(MAKECMDGOALS)))
     RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -67,6 +40,7 @@ config:
 	rm -rf 42header;
 	echo *.log > .gitignore
 	echo .*.swp >> .gitignore
+	echo .gitignore >> .gitignore
 
 ifeq (search,$(firstword $(MAKECMDGOALS)))
     RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -85,5 +59,7 @@ fix42VM:
 	sudo rm /var/lib/dpkg/lock-frontend
 	sudo dpkg --configure -a
 
+new_ssh_key:
+	./setup.sh new_ssh_key
 
-.PHONY:	all clean fclean re build run prune exec config search ps
+.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key

@@ -11,7 +11,7 @@ RUN	mkdir ~/.gnupg;
 RUN    	apk add --no-cache --virtual .build-deps wget gnupg tar 
 
 RUN	\
-	wget https://dl.influxdata.com/influxdb/releases/influxdb-1.8.3-static_linux_amd64.tar.gz
+	wget -q https://dl.influxdata.com/influxdb/releases/influxdb-1.8.3-static_linux_amd64.tar.gz
 
 RUN	addgroup influxdb && \
 	adduser -s /bin/false -G influxdb -S -D influxdb;
@@ -25,7 +25,7 @@ RUN     chmod +x influxdb-*/*; \
 	cp /influxdb-*/influxdb.conf /etc/influxdb/;
 
 RUN	mkdir -p /usr/src /etc/telegraf; \
-	wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz; \
+	wget -q https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz; \
 	tar -C /usr/src -xzf telegraf-1.16.2_linux_amd64.tar.gz; \
     	mv /usr/src/telegraf*/etc/telegraf/telegraf.conf /etc/telegraf/; \
     	mkdir /etc/telegraf/telegraf.d; \

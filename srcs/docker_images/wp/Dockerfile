@@ -19,8 +19,8 @@ RUN		\
 		mv /tmp/nginx.conf /etc/nginx/nginx.conf; \
 		mv /tmp/index.html /www/index.html; \
 		cd www; \
-		wget http://wordpress.org/latest.tar.gz; \
-		tar -xzvf latest.tar.gz; \
+		wget -q http://wordpress.org/latest.tar.gz; \
+		tar -xzf latest.tar.gz; \
 		rm latest.tar.gz; \
 		rc-status --manual;\
 		rc-status --crashed; \
