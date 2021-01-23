@@ -74,7 +74,7 @@ echo $memTotal bytes ram memory
 echo $nbCpus cpus
 echo $freeSpace bytes of free spaces
 
-if [ $memTotal -le 3000000 ]; then
+if [ $memTotal -le 2900000 ]; then
 	echo Not enough RAM
 	exit 1
 elif [ $nbCpus -lt 3 ]; then

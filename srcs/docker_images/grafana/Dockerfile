@@ -25,17 +25,8 @@ RUN	wget https://dl.grafana.com/oss/release/grafana-7.3.2.linux-amd64.tar.gz; \
 	cp -r grafana-7.3.2/* .; \
     	addgroup -S grafana; \
     	adduser -S -G grafana grafana; \
-	cp /tmp/datasource.yaml /usr/share/grafana/conf/provisioning/datasources/; \
-	cp /tmp/test.yaml /usr/share/grafana/conf/provisioning/dashboards/; \
+	cp /tmp/dashboard.yaml /usr/share/grafana/conf/provisioning/dashboards/; \
 	cp /tmp/*.json /usr/share/grafana/conf/provisioning/dashboards/;
-
-#RUN	mkdir -p /usr/src /etc/telegraf; \
-#	wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz; \
-#	tar -C /usr/src -xzf telegraf-1.16.2_linux_amd64.tar.gz; \
-#   	mv /usr/src/telegraf*/etc/telegraf/telegraf.conf /etc/telegraf/; \
-#   	mkdir /etc/telegraf/telegraf.d; \
-#   	cp -a /usr/src/telegraf*/usr/bin/telegraf /usr/bin/; \
-#	cp /tmp/telegraf.conf /etc/telegraf/;
 
 EXPOSE	3000
 
