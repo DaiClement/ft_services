@@ -103,7 +103,7 @@ check_minimum_requirement()
 		exit 1
 	fi
 	
-	if [ '$(groups | grep docker)' = '' ]
+	if [ "$(groups | grep docker)" = "" ]
 	then
 		sudo usermod -aG docker $USER
 		echo session will close in 10second to update \'docker\' group
