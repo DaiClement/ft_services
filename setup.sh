@@ -15,7 +15,11 @@ check_shell_version()
 
 launch_ft_services()
 {
-	echo download minikube can take a while - please wait
+	check_shell_version
+	check_minimum_requirement;
+	check_software_version;
+
+	echo download and/or start minikube can take a while - please wait
 	minikube start --driver=docker --cpus=2 --memory=2000 > $log_file 2> $error_file;
 	echo minikube started;
 
@@ -59,22 +63,23 @@ launch_ft_services()
 }
 
 get_log(){
+	echo LOGIN/PASSWORD$'\n'
 	echo for phpmyadmin
-	echo login: admin '|' password: pass
-	echo login: wp-admin '|' password: pass$'\n'
+	echo login: admin$'\t\t''|'$'\t'password: pass
+	echo login: wp-admin$'\t\t''|'$'\t'password: pass$'\n'
 
 	echo for wordpress
-	echo login: wp-admin '|' password:pass
-	echo login: Author '|' password:pass
-	echo login: contributor '|' password:pass
-	echo login: Editor '|' password:pass
-	echo login: subscriber '|' password:pass$'\n'
+	echo login: admin$'\t\t''|'$'\t'password: pass
+	echo login: Author$'\t\t''|'$'\t'password: pass
+	echo login: contributor$'\t''|'$'\t'password: pass
+	echo login: Editor$'\t\t''|'$'\t'password: pass
+	echo login: subscriber$'\t''|'$'\t'password: pass$'\n'
 
 	echo for grafana
-	echo login: admin '|' password: $'admin\n'
+	echo login: admin$'\t\t''|'$'\t'password: $'pass\n'
 
 	echo for ftps
-	echo login: root '|' password: 'pass'
+	echo login: root$'\t\t''|'$'\t'password: 'pass'
 }
 
 check_minimum_requirement()
@@ -101,7 +106,19 @@ check_minimum_requirement()
 	if [ '$(groups | grep docker)' = '' ]
 	then
 		sudo usermod -aG docker $USER
-		echo "close session and reconnect to update 'docker' group"
+		echo session will close in 10second to update \'docker\' group
+		echo please reconnect and launch ft_services again
+		sleep 10
+		sudo kill -9 \
+		$( \
+			echo \
+			$( \
+				ps -ft \
+				$( \
+					w | grep user42 | awk '{print $2}' \
+				) \
+			) | grep root | awk '{print $10}' \
+		)
 		exit
 	fi
 }
@@ -135,15 +152,9 @@ if [ "$1" = "re" ]
 then
 	minikube stop >> $log_file 2>> $error_file ;
 	minikube delete >> $log_file 2>> $error_file ;
-	check_shell_version
-	check_minimum_requirement;
-	check_software_version;
 	launch_ft_services;
 elif [ "$1" = "" ]
 then
-	check_shell_version
-	check_minimum_requirement;
-	check_software_version;
 	launch_ft_services;
 elif [ "$1" = "new_ssh_key" ]
 then
@@ -165,6 +176,10 @@ then
 	curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
 	sudo chmod +x ./kubectl
 	sudo mv ./kubectl /usr/local/bin/kubectl
+	exit
+elif [ "$1" = "password" ]
+then
+	get_log
 	exit
 else
 	echo \"$1\" is not a valid argument

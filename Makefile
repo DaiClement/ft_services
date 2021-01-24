@@ -73,4 +73,7 @@ endif
 install:
 	./setup.sh $(RUN_ARGS)
 
-.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla install
+password:
+	./setup.sh password
+
+.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla install password
