@@ -24,7 +24,6 @@ ifeq (exec,$(firstword $(MAKECMDGOALS)))
 endif
 
 exec:
-#	docker exec -ti $(RUN_ARGS)_alpine sh
 	kubectl exec --stdin --tty \
 	$$(kubectl get pods | grep $(RUN_ARGS) | cut -c \
 		-$$(expr $$(echo -n $(RUN_ARGS) | wc -c) + 28) \
@@ -66,4 +65,12 @@ filezilla: fix42VM
 	sudo apt-get install -y filezilla
 	filezilla 2>&1 >/dev/null &
 
-.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla
+ifeq (install,$(firstword $(MAKECMDGOALS)))
+    RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+    $(eval $(RUN_ARGS):;@:)
+endif
+
+install:
+	./setup.sh $(RUN_ARGS)
+
+.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla install

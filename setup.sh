@@ -3,6 +3,16 @@
 log_file=ft_services.log
 error_file=error.log
 
+check_shell_version()
+{
+	if [ "$(ps | grep $$ | awk '{print $4}')" != "bash" ] && [ "$(ps | grep $$ | awk '{print $4}')" != "setup.sh" ]
+	then
+		echo Your shell is $(ps | grep $$ | awk '{print $4}')
+		echo Please use bash
+		exit
+	fi
+}
+
 launch_ft_services()
 {
 	echo download minikube can take a while - please wait
@@ -88,7 +98,7 @@ check_minimum_requirement()
 		exit 1
 	fi
 	
-	if [[ $(groups | grep docker) = '' ]]
+	if [ '$(groups | grep docker)' = '' ]
 	then
 		sudo usermod -aG docker $USER
 		echo "close session and reconnect to update 'docker' group"
@@ -96,11 +106,44 @@ check_minimum_requirement()
 	fi
 }
 
+check_software_version()
+{
+	minikube_version=$(minikube version | grep minikube | awk '{print $3}')
+	echo minikube version: $minikube_version
+
+	kubectl_version=$(kubectl version --client | awk '{print $5}')
+	echo -n 'kubectl version: '
+	kubectl_version=$(echo $kubectl_version | cut -c "13-$(expr $(echo $kubectl_version | wc -c) - 3)")
+	echo $kubectl_version
+
+	echo -n 'docker version: '
+	docker_version=$(docker -v | awk '{print $3}')
+	docker_version=$(echo $docker_version | cut -c "-$(expr $(echo $docker_version | wc -c) - 2)")
+	echo $docker_version
+
+	if [ "$minikube_version" != "v1.9.0" ]; then
+		echo Please use minikube v1.9.0.$'\n'Install it with make install minikube or use a fresh new 42VM.
+		exit 1
+	elif [ "$kubectl_version" != "v1.18.0" ]; then
+		echo Please use kubectl version v1.18.0.$'\n'Install it with make install kubectl or use a fresh new 42VM.
+		exit 1
+	fi
+	echo
+}
+
 if [ "$1" = "re" ]
 then
 	minikube stop >> $log_file 2>> $error_file ;
 	minikube delete >> $log_file 2>> $error_file ;
+	check_shell_version
 	check_minimum_requirement;
+	check_software_version;
+	launch_ft_services;
+elif [ "$1" = "" ]
+then
+	check_shell_version
+	check_minimum_requirement;
+	check_software_version;
 	launch_ft_services;
 elif [ "$1" = "new_ssh_key" ]
 then
@@ -111,12 +154,20 @@ then
 	sleep 20 &
 	firefox -url https://profile.intra.42.fr/gitlab_users/new > /dev/null 2>&1 &
 	exit
-elif [ "$1" = "" ]
+elif [ "$1" = "minikube" ]
 then
-	check_minimum_requirement
-	launch_ft_services;
+	curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.9.0/minikube-linux-amd64 && chmod +x minikube
+	sudo mkdir -p /usr/local/bin/
+	sudo install minikube /usr/local/bin/
+	exit
+elif [ "$1" = "kubectl" ]
+then
+	curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+	sudo chmod +x ./kubectl
+	sudo mv ./kubectl /usr/local/bin/kubectl
+	exit
 else
-	echo \"$1\" is not an argument
+	echo \"$1\" is not a valid argument
 	exit 1
 fi
 
