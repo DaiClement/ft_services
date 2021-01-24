@@ -37,8 +37,8 @@ config:
 	sed 's/marvin/cdai/' 42header/vim/stdheader.vim | sed 's/42.fr/student.42.fr/' > ~/.vim/plugin/stdheader.vim;
 	git config --global core.editor vim;
 	rm -rf 42header;
-	echo *.log > .gitignore
-	echo .*.swp >> .gitignore
+	echo '*.log' > .gitignore
+	echo '.*.swp' >> .gitignore
 	echo .gitignore >> .gitignore
 
 ifeq (search,$(firstword $(MAKECMDGOALS)))
