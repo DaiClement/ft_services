@@ -75,6 +75,9 @@ launch_ft_services()
 get_log()
 {
 	echo LOGIN/PASSWORD$'\n'
+	echo 'for nginx (by ssh)'
+	echo login: user42$'\t\t''|'$'\t'password: user42$'\n'
+
 	echo for phpmyadmin
 	echo login: admin$'\t\t''|'$'\t'password: pass
 	echo login: wp-admin$'\t\t''|'$'\t'password: pass$'\n'

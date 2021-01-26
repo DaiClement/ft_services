@@ -73,4 +73,8 @@ install:
 get_log:
 	./setup.sh get_log
 
-.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla install get_log
+test_ssh:
+	ssh-keygen -f "/home/user42/.ssh/known_hosts" -R "172.17.0.2" || echo -n
+	ssh user42@172.17.0.2 -p 22
+
+.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla install get_log test_ssh

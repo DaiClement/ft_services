@@ -17,6 +17,7 @@ spec:
         ports:
         - containerPort: 443
         - containerPort: 80
+        - containerPort: 22
         imagePullPolicy: Never
         livenessProbe:
           exec:
@@ -44,4 +45,8 @@ spec:
       protocol: TCP
       port: 443
       targetPort: 443
+    - name: ssh
+      protocol: TCP
+      port: 22
+      targetPort: 22
   type: LoadBalancer
