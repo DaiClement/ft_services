@@ -25,9 +25,10 @@ endif
 
 exec:
 	kubectl exec --stdin --tty \
-	$$(kubectl get pods | grep $(RUN_ARGS) | cut -c \
+	$$(\
+		kubectl get pods | grep $(RUN_ARGS) | cut -c \
 		-$$(expr $$(echo -n $(RUN_ARGS) | wc -c) + 28) \
-		) -- sh
+	) -- sh
 
 config:
 	git config --global user.email "cdai@student.42.fr";
@@ -69,7 +70,7 @@ endif
 install:
 	./setup.sh $(RUN_ARGS)
 
-password:
-	./setup.sh password
+get_log:
+	./setup.sh get_log
 
-.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla install password
+.PHONY:	all clean fclean re exec config search firefox fix42VM new_ssh_key filezilla install get_log

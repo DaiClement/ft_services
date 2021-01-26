@@ -67,6 +67,9 @@ launch_ft_services()
 	docker build -t ftps-alpine ./srcs/docker_images/ftps/ >> $log_file 2>> $error_file ;
 	kubectl apply -f ./srcs/yaml_files/ftps.yaml >> $log_file 2>> $error_file ;
 	echo ftps started;
+
+	echo $'\n\n'
+	get_log
 }
 
 get_log()
@@ -113,10 +116,13 @@ check_minimum_requirement()
 	
 	if [ "$(groups | grep docker)" = "" ]
 	then
+		#add user42 to docker group
 		sudo usermod -aG docker $USER
 		echo session will close in 10second to update \'docker\' group
 		echo please reconnect and launch ft_services again
 		sleep 10
+
+		#auto deconnection
 		sudo kill -9 \
 		$( \
 			echo \
@@ -156,6 +162,36 @@ check_software_version()
 	echo
 }
 
+install_minikube()
+{
+	minikube_version=$(minikube version | grep minikube | awk '{print $3}')
+	echo minikube version: $minikube_version
+	
+	if [ "$minikube_version" != "v1.9.0" ]; then
+		curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.9.0/minikube-linux-amd64 && chmod +x minikube
+		sudo mkdir -p /usr/local/bin/
+		sudo install minikube /usr/local/bin/
+	else
+		echo minikuibe is already in version $minikube_version
+	fi
+}
+
+install_kubectl()
+{
+	kubectl_version=$(kubectl version --client | awk '{print $5}')
+	echo -n 'kubectl version: '
+	kubectl_version=$(echo $kubectl_version | cut -c "13-$(expr $(echo $kubectl_version | wc -c) - 3)")
+	echo $kubectl_version
+	
+	if [ "$kubectl_version" != "v1.18.0" ]; then
+		curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+		sudo chmod +x ./kubectl
+		sudo mv ./kubectl /usr/local/bin/kubectl
+	else
+		echo kubectl is already in version $kubectl_version
+	fi
+}
+
 if [ "$1" = "re" ]
 then
 	minikube stop >> $log_file 2>> $error_file ;
@@ -172,27 +208,19 @@ then
 	firefox -url signin.intra.42.fr > /dev/null 2>&1 &
 	sleep 20 &
 	firefox -url https://profile.intra.42.fr/gitlab_users/new > /dev/null 2>&1 &
-	exit
 elif [ "$1" = "minikube" ]
 then
-	curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.9.0/minikube-linux-amd64 && chmod +x minikube
-	sudo mkdir -p /usr/local/bin/
-	sudo install minikube /usr/local/bin/
-	exit
+	install_minikube
 elif [ "$1" = "kubectl" ]
 then
-	curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
-	sudo chmod +x ./kubectl
-	sudo mv ./kubectl /usr/local/bin/kubectl
-	exit
-elif [ "$1" = "password" ]
+	install_kubectl
+elif [ "$1" = "get_log" ]
 then
 	get_log
-	exit
 elif [ "$1" = "fix42VM" ]
 then
 	# source: https://itsfoss.com/could-not-get-lock-error/
-	sudo kill -9 $$(sudo lsof /var/lib/dpkg/lock-frontend 2> /dev/null | grep unattende | awk '{print $$2}') 2>/dev/null  >/dev/null || echo -n
+	sudo kill -9 $(sudo lsof /var/lib/dpkg/lock-frontend 2> /dev/null | grep unattende | awk '{print $2}') 2>/dev/null  >/dev/null || echo -n
 	sudo rm /var/lib/dpkg/lock-frontend
 	sudo dpkg --configure -a
 elif [ "$1" = "filezilla" ]
@@ -204,5 +232,3 @@ else
 	exit 1
 fi
 
-echo $'\n\n'
-get_log
