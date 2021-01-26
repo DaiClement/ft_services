@@ -53,17 +53,13 @@ firefox:
 	firefox 2>&1 > /dev/null &
 
 fix42VM:
-	# source: https://itsfoss.com/could-not-get-lock-error/
-	sudo kill -9 $$(sudo lsof /var/lib/dpkg/lock-frontend 2> /dev/null | grep unattende | awk '{print $$2}')
-	sudo rm /var/lib/dpkg/lock-frontend
-	sudo dpkg --configure -a
+	./setup.sh fix42VM
 
 new_ssh_key:
 	./setup.sh new_ssh_key
 
 filezilla: fix42VM
-	sudo apt-get install -y filezilla
-	filezilla 2>&1 >/dev/null &
+	./setup.sh filezilla
 
 ifeq (install,$(firstword $(MAKECMDGOALS)))
     RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))

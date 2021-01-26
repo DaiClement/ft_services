@@ -15,6 +15,13 @@ check_shell_version()
 
 launch_ft_services()
 {
+	if [ ! -f "/tmp/cdai_config" ];
+	then
+		minikube stop || echo -n;
+		minikube delete --all || echo -n;
+		touch /tmp/cdai_config;
+	fi
+
 	check_shell_version
 	check_minimum_requirement;
 	check_software_version;
@@ -62,7 +69,8 @@ launch_ft_services()
 	echo ftps started;
 }
 
-get_log(){
+get_log()
+{
 	echo LOGIN/PASSWORD$'\n'
 	echo for phpmyadmin
 	echo login: admin$'\t\t''|'$'\t'password: pass
@@ -181,6 +189,16 @@ elif [ "$1" = "password" ]
 then
 	get_log
 	exit
+elif [ "$1" = "fix42VM" ]
+then
+	# source: https://itsfoss.com/could-not-get-lock-error/
+	sudo kill -9 $$(sudo lsof /var/lib/dpkg/lock-frontend 2> /dev/null | grep unattende | awk '{print $$2}') 2>/dev/null  >/dev/null || echo -n
+	sudo rm /var/lib/dpkg/lock-frontend
+	sudo dpkg --configure -a
+elif [ "$1" = "filezilla" ]
+then
+	sudo apt-get install -y filezilla
+	filezilla 2>&1 >/dev/null &
 else
 	echo \"$1\" is not a valid argument
 	exit 1
