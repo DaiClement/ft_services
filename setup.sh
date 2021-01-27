@@ -109,7 +109,7 @@ check_minimum_requirement()
 	if [ $memTotal -le 2900000 ]; then
 		echo Not enough RAM
 		exit 1
-	elif [ $nbCpus -lt 3 ]; then
+	elif [ $nbCpus -lt 2 ]; then
 		echo Not enough cpus
 		exit 1
 	elif [ $freeSpace -le 5000000 ]; then
