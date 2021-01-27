@@ -15,6 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
+  "id": 4,
   "links": [],
   "panels": [
     {
@@ -103,7 +104,7 @@
             {
               "key": "annotation.io.kubernetes.container.ports",
               "operator": "=",
-              "value": "[{\"containerPort\":443,\"protocol\":\"TCP\"},{\"containerPort\":80,\"protocol\":\"TCP\"}]"
+              "value": "[{\"containerPort\":443,\"protocol\":\"TCP\"},{\"containerPort\":80,\"protocol\":\"TCP\"},{\"containerPort\":22,\"protocol\":\"TCP\"}]"
             }
           ]
         }
@@ -235,7 +236,7 @@
             {
               "key": "annotation.io.kubernetes.container.ports",
               "operator": "=",
-              "value": "[{\"containerPort\":443,\"protocol\":\"TCP\"},{\"containerPort\":80,\"protocol\":\"TCP\"}]"
+              "value": "[{\"containerPort\":443,\"protocol\":\"TCP\"},{\"containerPort\":80,\"protocol\":\"TCP\"},{\"containerPort\":22,\"protocol\":\"TCP\"}]"
             }
           ]
         }
@@ -367,7 +368,7 @@
             {
               "key": "annotation.io.kubernetes.container.ports",
               "operator": "=",
-              "value": "[{\"containerPort\":443,\"protocol\":\"TCP\"},{\"containerPort\":80,\"protocol\":\"TCP\"}]"
+              "value": "[{\"containerPort\":443,\"protocol\":\"TCP\"},{\"containerPort\":80,\"protocol\":\"TCP\"},{\"containerPort\":22,\"protocol\":\"TCP\"}]"
             }
           ]
         }
@@ -499,7 +500,7 @@
             {
               "key": "annotation.io.kubernetes.container.ports",
               "operator": "=",
-              "value": "[{\"containerPort\":443,\"protocol\":\"TCP\"},{\"containerPort\":80,\"protocol\":\"TCP\"}]"
+              "value": "[{\"containerPort\":443,\"protocol\":\"TCP\"},{\"containerPort\":80,\"protocol\":\"TCP\"},{\"containerPort\":22,\"protocol\":\"TCP\"}]"
             }
           ]
         }
